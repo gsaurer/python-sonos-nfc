@@ -11,6 +11,7 @@ import RPi.GPIO as GPIO
 import MFRC522
 import signal
 import NFCHelper
+import argparse
 
 continue_reading = True
 
@@ -23,6 +24,12 @@ def end_read(signal,frame):
 
 # Hook the SIGINT
 signal.signal(signal.SIGINT, end_read)
+
+parser = argparse.ArgumentParser(description='Write NFC tags for sonos.')
+#parser.add_argument('-nfcKey', type=str, default='FF:FF:FF:FF:FF:FF', help='The hex code of the nfc key to writ the content default: FF:FF:FF:FF:FF:FF')
+args = parser.parse_args()
+
+
 
 # Create an object of the class MFRC522
 MIFAREReader = MFRC522.MFRC522()

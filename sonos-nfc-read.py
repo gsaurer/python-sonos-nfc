@@ -32,6 +32,7 @@ parser = argparse.ArgumentParser(description='Write NFC tags for sonos.')
 parser.add_argument('-test', type=bool, default=False, help='Just test the read but dont perform the action on sonos')
 parser.add_argument('-sonosUri', type=str, default=SonosController.SONOS_BASE_URI, help='The Sonos base Uri to use')
 parser.add_argument('-sonosRoom', type=str, default=SonosController.SONOS_ROOM, help='The Sonos room to play the content at')
+#parser.add_argument('-nfcKey', type=str, default='FF:FF:FF:FF:FF:FF', help='The hex code of the nfc key to writ the content default: FF:FF:FF:FF:FF:FF')
 args = parser.parse_args()
 
 is_test = args.test

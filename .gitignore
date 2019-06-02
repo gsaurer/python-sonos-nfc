@@ -1,0 +1,7 @@
+tmp/
+settings.ini
+*.log
+
+# VS
+.vscode
+.vscode/launch.json

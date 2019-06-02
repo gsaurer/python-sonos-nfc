@@ -22,7 +22,6 @@ def play(command):
     return playRoom(SONOS_ROOM, command)
 
 def playRoom(room, command):
-
     sonosUri = SONOS_BASE_URI + "/%s/nfc/%s" % (room, command)
     executeSonosCommand(sonosUri)
 
