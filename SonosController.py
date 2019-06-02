@@ -24,6 +24,15 @@ def play(command):
 def playRoom(room, command):
 
     sonosUri = SONOS_BASE_URI + "/%s/nfc/%s" % (room, command)
+    executeSonosCommand(sonosUri)
+
+
+def playPause(room):
+    sonosUri = SONOS_BASE_URI + "/%s/playpause" % (room)
+    executeSonosCommand(sonosUri)
+
+
+def executeSonosCommand(sonosUri):
     print("Calling '%s'" % sonosUri)
 
     # Send command
@@ -34,3 +43,4 @@ def playRoom(room, command):
         return True
     else:
         return False
+

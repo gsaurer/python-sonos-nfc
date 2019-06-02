@@ -14,8 +14,10 @@ import time
 import math
 import SonosController
 import NFCHelper
+import argparse
 
 continue_reading = True
+is_test = False
 
 ## Capture SIGINT for cleanup when the script is aborted
 def end_read(signal,frame):
@@ -26,7 +28,17 @@ def end_read(signal,frame):
 # Hook the SIGINT
 signal.signal(signal.SIGINT, end_read)
 
-# Create an object of the class MFRC522
+parser = argparse.ArgumentParser(description='Write NFC tags for sonos.')
+parser.add_argument('-test', type=bool, default=False, help='Just test the read but dont perform the action on sonos')
+parser.add_argument('-sonosUri', type=str, default=SonosController.SONOS_BASE_URI, help='The Sonos base Uri to use')
+parser.add_argument('-sonosRoom', type=str, default=SonosController.SONOS_ROOM, help='The Sonos room to play the content at')
+args = parser.parse_args()
+
+is_test = args.test
+SonosController.SONOS_BASE_URI = args.sonosUri
+SonosController.SONOS_ROOM = args.sonosRoom
+
+
 MIFAREReader = MFRC522.MFRC522()
 
 print("Add NFC Tag ...")
@@ -81,6 +93,7 @@ while continue_reading:
         MIFAREReader.MFRC522_StopCrypto1()
         
         #send command to server
-        SonosController.play(nfcData)
+        if(not is_test):
+            SonosController.play(nfcData)
 
         time.sleep(3)

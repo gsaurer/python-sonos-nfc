@@ -14,8 +14,10 @@ import time
 import textwrap
 import sys
 import NFCHelper
+import argparse
 
 continue_reading = True
+is_Test = False
 
 # Capture SIGINT for cleanup when the script is aborted
 def end_read(signal,frame):
@@ -25,6 +27,13 @@ def end_read(signal,frame):
     GPIO.cleanup()
 # Hook the SIGINT
 signal.signal(signal.SIGINT, end_read)
+
+parser = argparse.ArgumentParser(description='Write NFC tags for sonos.')
+parser.add_argument('-test', type=bool, default=False, help='Just test the reset, but dont perform the action on the card')
+#parser.add_argument('-nfcKey', type=str, default='FF:FF:FF:FF:FF:FF', help='The hex code of the nfc key to writ the content default: FF:FF:FF:FF:FF:FF')
+args = parser.parse_args()
+
+is_test = args.test
 
 # Create an object of the class MFRC522
 MIFAREReader = MFRC522.MFRC522()
@@ -60,11 +69,13 @@ while continue_reading:
  
         while sectorCount < 64:
             if(sectorCount != 0 and sectorCount % 4 != 3 ):
-                NFCHelper.clear_Sector(MIFAREReader, uid, NFCHelper.AUTH_KEY_DEFAULT, sectorCount)
+                if(not is_test):
+                    NFCHelper.clear_Sector(MIFAREReader, uid, NFCHelper.AUTH_KEY_DEFAULT, sectorCount)
                 NFCHelper.read_Sector(MIFAREReader, uid, NFCHelper.AUTH_KEY_DEFAULT, sectorCount) 
             sectorCount = sectorCount + 1 
         
-        NFCHelper.clear_Metadata(MIFAREReader, uid, NFCHelper.AUTH_KEY_DEFAULT)
+        if(not is_test):
+            NFCHelper.clear_Metadata(MIFAREReader, uid, NFCHelper.AUTH_KEY_DEFAULT)
         nfcDataSize = NFCHelper.read_Metadata(MIFAREReader, uid, NFCHelper.AUTH_KEY_DEFAULT)
         
         # Stop

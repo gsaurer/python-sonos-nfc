@@ -14,8 +14,11 @@ import time
 import textwrap
 import sys
 import NFCHelper
+import argparse
 
 continue_reading = True
+is_test = False
+nfcData = "" 
 
 # Capture SIGINT for cleanup when the script is aborted
 def end_read(signal,frame):
@@ -29,8 +32,18 @@ signal.signal(signal.SIGINT, end_read)
 # Create an object of the class MFRC522
 MIFAREReader = MFRC522.MFRC522()
 
-nfcData = "spotify:user:gsaurer:playlist:7bOp1XYRY6NLfU1FdWYHLn" 
-nfcData = input("Enter URI to write: ")
+parser = argparse.ArgumentParser(description='Write NFC tags for sonos.')
+parser.add_argument('-test', type=bool, default=False, help='Just test the writing but dont perform the action on the card')
+parser.add_argument('-uri', type=str, default='', help='The content that should be written')
+#parser.add_argument('-nfcKey', type=str, default='FF:FF:FF:FF:FF:FF', help='The hex code of the nfc key to writ the content default: FF:FF:FF:FF:FF:FF')
+args = parser.parse_args()
+
+is_test = args.test
+nfcData = args.uri
+
+if(not nfcData):
+    nfcData = input("Enter URI to write: ")
+
 print ("URI that will be written: %s" % nfcData)
 
 print("Add NFC Tag ...")
@@ -64,7 +77,8 @@ while continue_reading:
         print("Sector [%s-%s] need to be written with data." % (sectorCount, sectorCount + len(sectors) - 1))
  
         for sectorContent in sectors:
-            NFCHelper.write_Sector(MIFAREReader, uid, NFCHelper.AUTH_KEY_DEFAULT, sectorCount, sectorContent)
+            if(not is_test):
+                NFCHelper.write_Sector(MIFAREReader, uid, NFCHelper.AUTH_KEY_DEFAULT, sectorCount, sectorContent)
             NFCHelper.read_Sector(MIFAREReader, uid, NFCHelper.AUTH_KEY_DEFAULT, sectorCount) 
             sectorCount = sectorCount + 1 
             if(sectorCount % 4 == 3):
@@ -73,7 +87,8 @@ while continue_reading:
         # write Metadata
         expectedNfcDataSize = len(nfcData)
 
-        NFCHelper.write_Metadata(MIFAREReader, uid, NFCHelper.AUTH_KEY_DEFAULT, nfcData)
+        if(not is_test)
+            NFCHelper.write_Metadata(MIFAREReader, uid, NFCHelper.AUTH_KEY_DEFAULT, nfcData)
         nfcDataSize = NFCHelper.read_Metadata(MIFAREReader, uid, NFCHelper.AUTH_KEY_DEFAULT)
         
         if(nfcDataSize != expectedNfcDataSize):
