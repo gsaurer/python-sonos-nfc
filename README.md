@@ -37,7 +37,9 @@ Write Cards
 
 `python sonos-nfc-write.py -uri [URI]` 
 
-will write a card with an URI that the sonos controller can play. Supported formats are: 
+will write a card with an URI that the sonos controller can play. 
+
+Supported formats are: 
 * Local Playlist: 
 	* Format: playlist:[Playlist Name] 
 	* Example: _playlist:Test 1_
@@ -54,7 +56,7 @@ will write a card with an URI that the sonos controller can play. Supported form
 	* Format: tunein:[id] 
 	* Example: _tunein:8007_
 
-The card programm will write the uri to the card including some meta information to get the content right 
+The card programm will write the uri to the card including some meta information to get the content right. Please make sure that the service you want to leverage are configured correclty in your node-sonos-http-api server. Follow the instructions there as the service leverages the standard api's to play the music. 
 
 
 Read Cards
