@@ -15,7 +15,7 @@ SONOS_ROOM = ""
 
 config = configparser.ConfigParser()
 config.read('settings.ini')
-SONOS_BASE_URI = config.get('Sonos', 'Server', fallback='http://192.168.10.2:5005')
+SONOS_BASE_URI = config.get('Sonos', 'Server', fallback='http://localhost:5005')
 SONOS_ROOM = config.get('Sonos', 'Room', fallback='Office')
 
 def play(command):
