@@ -29,8 +29,6 @@ parser = argparse.ArgumentParser(description='Write NFC tags for sonos.')
 #parser.add_argument('-nfcKey', type=str, default='FF:FF:FF:FF:FF:FF', help='The hex code of the nfc key to writ the content default: FF:FF:FF:FF:FF:FF')
 args = parser.parse_args()
 
-
-
 # Create an object of the class MFRC522
 MIFAREReader = MFRC522.MFRC522()
 
